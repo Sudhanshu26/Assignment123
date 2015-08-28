@@ -1,0 +1,87 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import java.util.TreeMap;
+
+public class XORCode {
+	static int[] key = new int[3];
+
+	static int Frequency(int l, int[] k) {
+		TreeMap<Integer, Integer> map = new TreeMap<Integer, Integer>();
+		for (int m = 0; m < l / 3; m++) {
+			int count = 0;
+			int cc;
+			if (k[m] == 0)
+				continue;
+			else
+				cc = k[m];
+			for (int n = m + 1; n < l / 3; n++) {
+				if (cc == k[n] && k[n] != 0) {
+					count++;
+					k[n] = 0;
+				}
+			}
+			map.put(count, cc);
+			// System.out.print(cc + " "+ count + " " );
+			// System.out.println("");
+			// System.out.println((char)(cc ^ (int)'e'));
+			// System.out.println("");
+		}
+		int z = (int) (map.values().toArray()[map.size() - 2]);
+		return (z);
+	}
+
+	public static void main(String[] args) {
+		String file ="/home/sudhanshu/Desktop/p059_cipher.txt";
+		File file1 = new File(file);
+		try {
+			Scanner sc = new Scanner(file1);
+			String line = sc.nextLine();
+			String []Array=line.split(",");
+//			for(int i=0;i<3;i++){
+//			System.out.println(intArray[i]);
+//			}
+			
+			int[] results = new int[Array.length];
+
+			for (int i = 0; i < Array.length; i++) {
+			    
+			        results[i] = Integer.parseInt(Array[i]);
+			}
+//			for(int i=0;i<3;i++){
+//			System.out.println(results[i]);
+//			}
+			int l =results.length;
+			
+			int[] k1 = new int[l/3];
+			int[] k2 = new int[l/3];
+			int[] k3 = new int[l/3];
+			
+			for(int j=0;j<l/3;j++){
+				k1[j] = results[3*j];
+				k2[j] = results[3*j + 1];
+				k3[j] = results[3*j + 2];
+			}
+//			System.out.println(k1[1]);
+//			System.out.println(k2[1]);
+//			System.out.println(k3[1]);
+		//	Frequency(l,k1);
+			//
+			key[0]=Frequency(l,k1) ^ (int)'e';
+			System.out.println(key[0]);
+			key[1]='o'; //FrequecyAnalyzer(l,k2) ^ (int)'e';
+			//System.out.println("-----------------------");
+			key[2]=Frequency(l,k3) ^ (int)'e';
+		    Decrypt();
+			
+		    public void Decrypt(){
+				int sum =0;
+				for(int i=0;i<results.length;i++){
+				results[i]=results[i] ^ key[i % 3];
+				System.out.print((char)results[i]);
+				sum+=results[i];
+				}
+				System.out.println();
+				System.out.println();
+				System.out.println("The sum of ascii values in the original text is " + sum);
+				}
